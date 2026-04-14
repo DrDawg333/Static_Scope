@@ -1,0 +1,350 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StaticScope - Multi-Language Code Complexity Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .auth-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+        }
+        .language-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            transform: translateY(-2px);
+        }
+        .nav-link {
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: #38bdf8;
+        }
+        textarea {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        textarea:focus {
+            border-color: #0ea5e9;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-900 py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mr-3">
+                <i class="fas fa-code text-white text-xl"></i>
+            </div>
+            <span class="text-xl font-bold text-white">StaticScope</span>
+        </div>
+        <div class="hidden md:flex space-x-8">
+            <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Tools</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Sign In</a>
+        </div>
+        <button class="md:hidden text-white">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="text-center py-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Advanced Code Complexity Analysis</h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                StaticScope helps developers identify complex, risky, and potentially buggy code before it becomes a problem. 
+                Supports Python, Java, C, and C++ with intelligent static analysis.
+            </p>
+            <div class="flex justify-center">
+                <button class="btn-primary px-6 py-3 rounded-lg font-medium text-white">
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="py-12">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">About StaticScope</h2>
+                <div class="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                    <p class="text-gray-300 mb-6">
+                        StaticScope is a static code analysis platform designed to evaluate code quality, complexity, and defect risk. 
+                        By analyzing your code before runtime, we help you identify potential issues that could lead to bugs, security 
+                        vulnerabilities, or maintenance challenges.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="flex items-center justify-center p-4 bg-gray-800/50 rounded-lg">
+                            <i class="fab fa-python text-3xl text-blue-400"></i>
+                        </div>
+                        <div class="flex items-center justify-center p-4 bg-gray-800/50 rounded-lg">
+                            <i class="fab fa-java text-3xl text-red-400"></i>
+                        </div>
+                        <div class="flex items-center justify-center p-4 bg-gray-800/50 rounded-lg">
+                            <i class="fas fa-c text-3xl text-blue-300"></i>
+                        </div>
+                        <div class="flex items-center justify-center p-4 bg-gray-800/50 rounded-lg">
+                            <i class="fas fa-c-plus-plus text-3xl text-green-400"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">
+                        Early detection of risky code patterns helps reduce technical debt, improve code maintainability, 
+                        and prevent costly bugs in production environments. Our platform provides actionable insights 
+                        to help you write cleaner, more efficient code.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section (Protected) -->
+        <section class="py-12">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">Code Analysis Tools</h2>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mr-3">
+                            <span class="text-white font-medium">JD</span>
+                        </div>
+                        <span class="text-gray-300">john.doe@example.com</span>
+                    </div>
+                </div>
+
+                <!-- Language Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Python Card -->
+                    <div class="language-card rounded-xl p-6 card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <i class="fab fa-python text-2xl text-blue-400 mr-3"></i>
+                                <h3 class="text-xl font-bold text-white">Python</h3>
+                            </div>
+                            <span class="bg-blue-900/50 text-blue-300 px-2 py-1 rounded text-xs">Beta</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Analyze Python code for complexity, maintainability, and potential bugs.</p>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 mb-2 text-sm">Upload File or Paste Code</label>
+                            <div class="flex space-x-2">
+                                <label class="flex-1">
+                                    <input type="file" class="hidden" accept=".py">
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-center cursor-pointer text-gray-300 hover:bg-gray-800/80">
+                                        <i class="fas fa-file-upload mr-2"></i>Upload
+                                    </div>
+                                </label>
+                                <button class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80">
+                                    <i class="fas fa-paste mr-2"></i>Paste
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="w-full h-32 rounded-lg p-3 text-sm" placeholder="Paste your Python code here..."></textarea>
+                        <button class="btn-primary w-full mt-4 py-2 rounded-lg font-medium text-white">
+                            Analyze Code
+                        </button>
+                    </div>
+
+                    <!-- Java Card -->
+                    <div class="language-card rounded-xl p-6 card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <i class="fab fa-java text-2xl text-red-400 mr-3"></i>
+                                <h3 class="text-xl font-bold text-white">Java</h3>
+                            </div>
+                            <span class="bg-red-900/50 text-red-300 px-2 py-1 rounded text-xs">Beta</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Detect complex methods, potential memory leaks, and security issues.</p>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 mb-2 text-sm">Upload File or Paste Code</label>
+                            <div class="flex space-x-2">
+                                <label class="flex-1">
+                                    <input type="file" class="hidden" accept=".java">
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-center cursor-pointer text-gray-300 hover:bg-gray-800/80">
+                                        <i class="fas fa-file-upload mr-2"></i>Upload
+                                    </div>
+                                </label>
+                                <button class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80">
+                                    <i class="fas fa-paste mr-2"></i>Paste
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="w-full h-32 rounded-lg p-3 text-sm" placeholder="Paste your Java code here..."></textarea>
+                        <button class="btn-primary w-full mt-4 py-2 rounded-lg font-medium text-white">
+                            Analyze Code
+                        </button>
+                    </div>
+
+                    <!-- C Card -->
+                    <div class="language-card rounded-xl p-6 card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-c text-2xl text-blue-300 mr-3"></i>
+                                <h3 class="text-xl font-bold text-white">C</h3>
+                            </div>
+                            <span class="bg-blue-900/50 text-blue-300 px-2 py-1 rounded text-xs">Beta</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Identify memory leaks, buffer overflows, and undefined behavior.</p>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 mb-2 text-sm">Upload File or Paste Code</label>
+                            <div class="flex space-x-2">
+                                <label class="flex-1">
+                                    <input type="file" class="hidden" accept=".c">
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-center cursor-pointer text-gray-300 hover:bg-gray-800/80">
+                                        <i class="fas fa-file-upload mr-2"></i>Upload
+                                    </div>
+                                </label>
+                                <button class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80">
+                                    <i class="fas fa-paste mr-2"></i>Paste
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="w-full h-32 rounded-lg p-3 text-sm" placeholder="Paste your C code here..."></textarea>
+                        <button class="btn-primary w-full mt-4 py-2 rounded-lg font-medium text-white">
+                            Analyze Code
+                        </button>
+                    </div>
+
+                    <!-- C++ Card -->
+                    <div class="language-card rounded-xl p-6 card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-c-plus-plus text-2xl text-green-400 mr-3"></i>
+                                <h3 class="text-xl font-bold text-white">C++</h3>
+                            </div>
+                            <span class="bg-green-900/50 text-green-300 px-2 py-1 rounded text-xs">Beta</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Analyze templates, memory management, and exception safety.</p>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 mb-2 text-sm">Upload File or Paste Code</label>
+                            <div class="flex space-x-2">
+                                <label class="flex-1">
+                                    <input type="file" class="hidden" accept=".cpp,.hpp,.cc,.h">
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-center cursor-pointer text-gray-300 hover:bg-gray-800/80">
+                                        <i class="fas fa-file-upload mr-2"></i>Upload
+                                    </div>
+                                </label>
+                                <button class="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80">
+                                    <i class="fas fa-paste mr-2"></i>Paste
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="w-full h-32 rounded-lg p-3 text-sm" placeholder="Paste your C++ code here..."></textarea>
+                        <button class="btn-primary w-full mt-4 py-2 rounded-lg font-medium text-white">
+                            Analyze Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            <p>© 2023 StaticScope. All rights reserved.</p>
+            <p class="mt-2 text-sm">Advanced static code analysis for modern development teams</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mock authentication state
+        let isAuthenticated = true;
+        const userEmail = "john.doe@example.com";
+        
+        // DOM elements
+        const signInLink = document.querySelector('a[href="#"]:nth-child(3)');
+        const toolsSection = document.querySelector('.py-12:nth-child(3)');
+        
+        // If not authenticated, redirect to sign in
+        if (!isAuthenticated) {
+            toolsSection.innerHTML = `
+                <div class="max-w-2xl mx-auto text-center py-12">
+                    <div class="bg-gray-800/50 rounded-xl p-8 border border-gray-700">
+                        <i class="fas fa-lock text-5xl text-gray-500 mb-6"></i>
+                        <h2 class="text-2xl font-bold text-white mb-4">Authentication Required</h2>
+                        <p class="text-gray-300 mb-6">Please sign in to access the code analysis tools.</p>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-medium text-white" onclick="location.href='#'">
+                            Sign In
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // File upload handling
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'No file selected';
+                const label = this.nextElementSibling;
+                if (label) {
+                    label.textContent = fileName.length > 20 ? fileName.substring(0, 20) + '...' : fileName;
+                }
+            });
+        });
+        
+        // Analyze button handling
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.language-card');
+                const language = card.querySelector('h3').textContent;
+                alert(`Analyzing ${language} code... (This is a demo)`);
+            });
+        });
+    </script>
+</body>
+</html>
