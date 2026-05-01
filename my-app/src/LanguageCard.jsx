@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { FaUpload, FaPaste } from "react-icons/fa";
+import { FaPaste } from "react-icons/fa";
 
-function LanguageCard({ lang }) {
+function LanguageCard({ lang, onResult }) {
   const Icon = lang.icon;
+
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePaste = async () => {
     try {
@@ -14,13 +16,52 @@ function LanguageCard({ lang }) {
     }
   };
 
+  const analyzeCode = async () => {
+    if (!code.trim()) {
+      alert("Paste some code first");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Backend API call
+      const response = await fetch("http://localhost:5000/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          language: lang.name,
+          code: code,
+        }),
+      });
+
+      const data = await response.json();
+
+      // Send result to App.jsx
+      onResult({
+        language: lang.name,
+        severity: data.severity,
+      });
+
+    } catch (error) {
+      console.error(error);
+      alert("Failed to analyze code");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl p-6 hover:-translate-y-2 transition-all">
-      
+
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
+
         <div className="flex items-center">
           <Icon className={`text-2xl mr-3 ${lang.color}`} />
+
           <h3 className="text-xl font-bold text-white">
             {lang.name}
           </h3>
@@ -29,35 +70,24 @@ function LanguageCard({ lang }) {
         <span className="bg-blue-900/50 text-blue-300 px-2 py-1 rounded text-xs">
           Beta
         </span>
+
       </div>
 
       <p className="text-gray-400 mb-4">
         Analyze {lang.name} code for complexity and bugs.
       </p>
 
-      {/* Upload */}
+      {/* Paste Button */}
       <div className="mb-4">
-        <label className="block text-gray-300 mb-2 text-sm">
-          Upload File or Paste Code
-        </label>
 
-        <div className="flex space-x-2">
-          <label className="flex-1 cursor-pointer">
-            <input type="file" className="hidden" accept={lang.accept} />
-            <div className="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-center text-gray-300 hover:bg-gray-800/80">
-              <FaUpload className="inline mr-2" />
-              Upload
-            </div>
-          </label>
+        <button
+          onClick={handlePaste}
+          className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80"
+        >
+          <FaPaste className="inline mr-2" />
+          Paste Code
+        </button>
 
-          <button
-            onClick={handlePaste}
-            className="bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-gray-300 hover:bg-gray-800/80"
-          >
-            <FaPaste className="inline mr-2" />
-            Paste
-          </button>
-        </div>
       </div>
 
       {/* Textarea */}
@@ -68,10 +98,14 @@ function LanguageCard({ lang }) {
         placeholder={`Paste ${lang.name} code here...`}
       />
 
-      {/* Button */}
-      <button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 py-2 rounded-lg text-white hover:opacity-90">
-        Analyze Code
+      {/* Analyze Button */}
+      <button
+        onClick={analyzeCode}
+        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 py-2 rounded-lg text-white hover:opacity-90"
+      >
+        {loading ? "Analyzing..." : "Analyze Code"}
       </button>
+
     </div>
   );
 }
